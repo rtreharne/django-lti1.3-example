@@ -130,8 +130,12 @@ LTI_CLIENT_ID = "10000000000006"
 LTI_DEPLOYMENT_ID = "10:f97330a96452fc363a34e0ef6d8d0d3e9e1007d2"
 
 LTI_ISS = "https://canvas.instructure.com"  # Canvas uses this even in dev
-LTI_PLATFORM_JWKS_URL = "http://canvas.docker/api/lti/security/jwks"
-LTI_AUTHORIZE_URL = "http://canvas.docker/api/lti/authorize_redirect"
+# LTI_PLATFORM_JWKS_URL = "http://canvas.docker/api/lti/security/jwks"
+# LTI_AUTHORIZE_URL = "http://canvas.docker/api/lti/authorize_redirect"
+
+LTI_ISS = "https://canvas.instructure.com"  # Canvas uses this even in dev
+LTI_PLATFORM_JWKS_URL = "https://canvas.ninepointeightone.com/api/lti/security/jwks"
+LTI_AUTHORIZE_URL = "https://canvas.ninepointeightone.com/api/lti/authorize_redirect"
 
 LTI_TOOL_REDIRECT_URI = "http://localhost:8000/launch/"
 
@@ -148,6 +152,8 @@ CSRF_TRUSTED_ORIGINS = [
     "http://canvas.docker",
     "https://canvas.docker",
     "http://localhost:8000",
+    "http://canvas.ninepointeightone.com"
+    "https://canvas.ninepointeightone.com"
 ]
 
 SESSION_ENGINE = "django.contrib.sessions.backends.db"

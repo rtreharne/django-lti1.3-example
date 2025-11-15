@@ -19,6 +19,15 @@ It includes:
     git clone git@github.com:rtreharne/django-lti1.3-example.git
     cd django-lti1.3-example
 
+### 2. Create and activiate a Virtual Environment
+
+    python3 -m venv .venv
+    source .venv/bin/activate
+
+### 3. Install requirements
+
+    pip install -r requirements.txt
+
 ------------------------------------------------------------------------
 
 ## 🔑 2. Generate RSA Keys for LTI
