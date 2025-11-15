@@ -61,24 +61,144 @@ For use with a development instance of the Canvas LMS you'll need at least:
 
 ------------------------------------------------------------------------
 
-## ▶️ 5. Register Your Tool in Canvas
+## ▶️ 5. Register Your Tool in Canvas (Developer Key + Course Installation)
 
-In **Developer Keys → LTI Key**, configure:
+To use your Django LTI 1.3 Base Tool inside Canvas, you must:
 
--   **Redirect URI**\
-    `http://localhost:8000/launch/`
--   **OIDC Login URL**\
-    `http://localhost:8000/login/`
--   **Tool JWKS URL**\
-    `http://localhost:8000/jwks/`
--   **LTI Advantage Services** (optional)
+1. Create an **LTI 1.3 Developer Key**
+2. Install the tool into a **Canvas course**
+3. Launch the tool to verify everything works
 
-After saving, grab your:
+Below is the full setup guide.
 
--   **Client ID**
--   **Deployment ID**
+---
 
-Add these to your settings.
+## **A. Create the LTI 1.3 Developer Key**
+
+In Canvas:
+
+1. Go to **Admin → Developer Keys**
+2. Click **+ Developer Key → LTI Key**
+3. Using **Manual Entry** fill in:
+
+### **1. Key Settings**
+
+| Setting | Value |
+|--------|--------|
+| **Key Name** | Django LTI 1.3 Base Tool |
+| **Owner Email** | your email |
+| **Redirect URIs** | `http://localhost:8000/launch/` |
+| **Privacy Level** | Public (recommended) |
+
+---
+
+### **2. LTI Advantage Services (Optional)**
+
+Enable only if needed:
+
+- Names & Role Provisioning
+- Assignment & Grade Services
+- Deep Linking
+
+Your base tool works without these.
+
+---
+
+### **3. Additional Settings → LTI Key Configuration**
+
+
+| Setting | Value |
+|--------|--------|
+| **OIDC Login URL** | `http://localhost:8000/login/` |
+| **Target Link URI** | `http://localhost:8000/launch/` |
+| **JWKS URL** | `http://localhost:8000/jwks/` |
+
+---
+
+### **4. Save the Developer Key**
+
+After saving:
+
+- Toggle the key **ON** (green)
+- Copy the **Client ID**
+
+---
+
+## **B. Install the Tool into a Canvas Course**
+
+1. Go to **Courses → Your Course**
+2. Click **Settings → Apps**
+3. Click **+ App**
+4. For **Configuration Type**, choose:
+
+> **By Client ID**
+
+5. Paste the **Client ID** from the Developer Key
+6. Canvas will display the tool name and settings
+7. Click **Install**
+
+The tool is now installed in that course.
+
+---
+
+## **C. Launch the Tool**
+
+Your tool may appear in:
+
+- Course **Navigation**
+- **Modules** (if added as a module item)
+- **Assignments** (if A+GS or deep linking enabled)
+
+For a simple launch:
+
+1. Go to the course
+2. Open the left-hand menu
+3. Click **Django LTI 1.3 Base Tool**
+
+Canvas will:
+
+- Send the user to `/login/`
+- Redirect via OIDC to Canvas
+- POST an `id_token` to `/launch/`
+- Your tool validates signature, state, nonce, issuer, audience
+- User lands on `/landing/`
+
+You should see:
+
+- “Welcome, \<Given Name\>”
+- Course title
+- Full LTI claims table
+
+---
+
+## 📚 Canvas Documentation & GitHub Resources
+
+### **Official Canvas Documentation**
+
+- LTI 1.3 Dev Key config  
+  https://canvas.instructure.com/doc/api/file.lti_dev_key_config.html  
+- LTI Deep Linking  
+  https://canvas.instructure.com/doc/api/file.lti_deep_linking.html  
+- LTI Advantage Services  
+  https://canvas.instructure.com/doc/api/lti_api.html  
+- Authentication & OAuth  
+  https://canvas.instructure.com/doc/api/file.oauth.html  
+
+### **Canvas LMS GitHub**
+
+- Main Canvas LMS repo  
+  https://github.com/instructure/canvas-lms  
+- LTI models & implementation  
+  https://github.com/instructure/canvas-lms/tree/master/app/models/lti  
+- IMS/LTI security code  
+  https://github.com/instructure/canvas-lms/tree/master/app/models/lti/ims  
+
+### **LTI Standard (IMS Global / 1EdTech)**
+
+- LTI 1.3 Core Specification  
+  https://www.imsglobal.org/spec/lti/v1p3  
+- LTI Advantage  
+  https://www.imsglobal.org/spec/lti/v1p3/  
 
 ------------------------------------------------------------------------
 
@@ -138,7 +258,7 @@ launches.
 
 ## 📜 License
 
-MIT (or your preferred license).
+This project is licensed under the [MIT License](LICENSE).
 
 ------------------------------------------------------------------------
 
