@@ -1,0 +1,19 @@
+This is a test student submission for the VivaNoodle system.
+
+The quick brown fox jumps over the lazy dog.
+This sentence contains every letter of the English alphabet.
+
+Here are some bullet-style notes:
+
+- Introduction to the topic
+- Description of methods used
+- Results and interpretation
+- Conclusion and future work
+
+This file is being used to verify:
+1. File upload
+2. Automatic text extraction
+3. Submission status page rendering
+4. Instructor dashboard display
+
+End of test file.

@@ -1,37 +1,68 @@
 {% extends "tool/base.html" %}
+{% load tool_extras %}
+
 {% block content %}
 
 <h2>{{ assignment.title }}</h2>
 
+
+
 <div class="card">
-    <h3>Instructor Dashboard</h3>
-
-    <div class="button-group" style="margin-bottom: 20px;">
-        <a href="{% url 'assignment_edit' %}" class="button primary">
-            Edit Assignment Settings
-        </a>
-    </div>
-
-    <hr>
-
     <h3>Student Submissions</h3>
 
-    {% if submissions %}
-        <ul class="submission-list">
-            {% for sub in submissions %}
-                <li class="submission-item">
-                    <strong>{{ sub.user_id }}</strong><br>
-                    <span class="timestamp">{{ sub.created_at|date:"Y-m-d H:i" }}</span>
-                    <pre class="submission-text">{{ sub.comment }}</pre>
+    {% if roster %}
+    <table style="width:100%; border-collapse: collapse;">
+        <thead>
+            <tr style="text-align:left; border-bottom:1px solid #ccc;">
+                <th style="padding:8px;">Student</th>
+                <th style="padding:8px;">Status</th>
+                <th style="padding:8px;">View</th>
+            </tr>
+        </thead>
 
-                    {% if sub.file %}
-                        <a class="file-link" href="{{ sub.file.url }}" download>Download file</a>
-                    {% endif %}
-                </li>
+        <tbody>
+
+            {% for member in roster %}
+
+                {# Only show actual enrolled students #}
+                {% if "learner" in member.roles|join:","|lower %}
+
+                    {% with uid=member.user_id %}
+                    {% with sub=submission_map|dict_get:uid %}
+
+                    <tr style="border-bottom:1px solid #eee;">
+                        <td style="padding:8px;">{{ member.name }}</td>
+
+                        {% if sub %}
+                            <td style="padding:8px; color:green; font-weight:600;">
+                                Submitted ({{ sub.created_at|date:"Y-m-d H:i" }})
+                            </td>
+                            <td style="padding:8px;">
+                                <a href="{% url 'submission_status' sub.id %}" class="button">
+                                    View
+                                </a>
+                            </td>
+                        {% else %}
+                            <td style="padding:8px; color:red;">
+                                Not Submitted
+                            </td>
+                            <td style="padding:8px;">–</td>
+                        {% endif %}
+                    </tr>
+
+                    {% endwith %}
+                    {% endwith %}
+
+                {% endif %}
+
             {% endfor %}
-        </ul>
+
+
+        </tbody>
+    </table>
+
     {% else %}
-        <p>No submissions yet.</p>
+        <p>No roster data available.</p>
     {% endif %}
 </div>
 

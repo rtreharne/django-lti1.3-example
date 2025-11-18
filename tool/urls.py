@@ -23,8 +23,14 @@ urlpatterns = [
 
     # Student Submission
     path("submit_text/", views.submit_text, name="submit_text"),
+    path("submit_file/", views.submit_file, name="submit_file"),
+    path("submission/<int:submission_id>/", views.submission_status, name="submission_status"),
 
-    # Debug helpers
-    path("test_set/", views.test_set_cookie),
-    path("test_read/", views.test_read_cookie),
+    # nprs
+    path("nrps/test/", views.nrps_test, name="nrps_test"),
+
+
+    # # Debug helpers
+    # path("test_set/", views.test_set_cookie),
+    # path("test_read/", views.test_read_cookie),
 ]

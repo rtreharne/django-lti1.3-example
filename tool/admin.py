@@ -1,13 +1,34 @@
 from django.contrib import admin
-from .models import Assignment, Submission
+from django.apps import apps
 
-@admin.register(Assignment)
-class AssignmentAdmin(admin.ModelAdmin):
-    list_display = ("title", "slug", "allow_multiple_submissions")
-    search_fields = ("title", "slug")
+# ---------------------------------------------------------------
+# Automatically register ALL models in the 'tool' app
+# ---------------------------------------------------------------
 
-@admin.register(Submission)
-class SubmissionAdmin(admin.ModelAdmin):
-    list_display = ("assignment", "user_id", "created_at", "grade")
-    search_fields = ("user_id",)
-    list_filter = ("assignment",)
+app = apps.get_app_config('tool')
+
+for model_name, model in app.models.items():
+    # Skip if already registered manually
+    if admin.site.is_registered(model):
+        continue
+
+    # Create a generic ModelAdmin with sensible defaults
+    class GenericAdmin(admin.ModelAdmin):
+        list_display = [
+            field.name for field in model._meta.fields
+            if field.get_internal_type() not in ("TextField",)
+        ]
+        search_fields = [
+            field.name for field in model._meta.fields
+            if field.get_internal_type() in ("CharField", "SlugField", "TextField")
+        ]
+        list_filter = [
+            field.name for field in model._meta.fields
+            if field.get_internal_type().endswith("Field") and not field.many_to_many
+            and field.get_internal_type() != "TextField"
+        ]
+
+    try:
+        admin.site.register(model, GenericAdmin)
+    except admin.sites.AlreadyRegistered:
+        pass
